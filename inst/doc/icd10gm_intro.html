@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Ewan Donnachie" />
+
+<meta name="date" content="2019-02-07" />
+
+<title>Introduction to the ICD10gm Package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to the ICD10gm Package</h1>
+<h3 class="subtitle"><em>Motivation, Basic Usage and Examples</em></h3>
+<h4 class="author"><em>Ewan Donnachie</em></h4>
+<h4 class="date"><em>2019-02-07</em></h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>ICD10gm is an R Package for working with the German Modification of the International Statistical Classification of Diseases and Related Health Problems (ICD-10-GM).</p>
+<p>The ICD-10 classification is an international standard for the coding of health service data. It is used widely both to document morbidity in healthcare systems, usually in the context of remuneration claims, and to encode <a href="http://www.who.int/healthinfo/mortality_data/en/">mortality statistics</a>. In Germany, the <a href="https://www.dimdi.de">German Instutite of Medical Documentation and Information (DIMDI)</a> releases a German Modification (ICD-10-GM) of the classification that forms a compulsory part of all remuneration claims in the ambulatory and hospital sectors. Further information and historical context can be found in, for example, <a href="https://doi.org/10.1007/s00103-007-0283-x">Graubner (2007)</a> or <a href="https://www.jstor.org/stable/25767019">Jetté <em>et al</em> (2010)</a>.</p>
+<div id="aims" class="section level2">
+<h2>Aims</h2>
+<p>This package was created to facilitate the analysis of data coded using the ICD-10-GM. In particular, it has the following aims:</p>
+<ol style="list-style-type: decimal">
+<li>Provide convenient access to the extended ICD-10-GM metadata</li>
+<li>Identify and extract ICD-10 codes from character strings</li>
+<li>Facilitate the specification of ICD codes for analysis, utilising the ICD hierarchy (e.g. given the specification “A0” return all subcodes in the range “A01” to “A09”)</li>
+<li>Enable the historization of ICD specifications when analysing longitudinal claims data, applying the automatic code transitions provided by DIMDI, identifying potentially problematic codes and enabling the specification of custom transitions</li>
+</ol>
+<p>ICD10gm is designed for use in the context of medical and health services research using routinely collected claims data. It is not suitable for use in operative coding as it does not include all relevant metadata (e.g. inclusion and exclusion notes and the detailed definitions of psychiatric diagnoses). The metadata provided in the ICD10gm package is not intended to replace the <a href="https://www.dimdi.de/dynamic/de/klassifikationen/icd/icd-10-gm/">official DIMDI documentation</a>, which should always be consulted when specifying ICD codes for analysis.</p>
+<p>The following presents an overview of the basic functionality provided by the ICD10gm package, illustrated by means of simple examples. To access this vignette in R, type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="st">&quot;icd10gm_intro&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)</code></pre></div>
+</div>
+</div>
+<div id="basic-use" class="section level1">
+<h1>Basic Use</h1>
+<div id="access-icd-10-gm-metadata" class="section level2">
+<h2>Access ICD-10-GM metadata</h2>
+<p>The ICD-10-GM metadata are provided by four data.frames that form the core of the ICD10gm package:</p>
+<ul>
+<li><code>icd_meta_chapters</code>: Specification of the ICD-10-GM chapters with label and number (Arabic and Roman numerals)</li>
+<li><code>icd_meta_blocks</code>: Specification of the ICD-10 blocks, each containing a sequence of related ICD-10 codes</li>
+<li><code>icd_meta_codes</code>: Extended metadata for all ICD-10-GM codes</li>
+<li><code>icd_meta_transitions</code>: The “crosswalk” table specifying old and new ICD-10-GM codes for successive annual versions.</li>
+</ul>
+<p>Documentation for the individual datasets can be accessed using the R help system by typing, for example, either <code>help(&quot;icd_meta_codes&quot;, package = &quot;ICD10gm&quot;)</code> or simply <code>?icd_meta_codes</code>.</p>
+<p>While column names have been translated into English, the ICD-10-GM labels are in German with UTF-8 character encoding throughout.</p>
+<p>In addition to this tabular data, several utility functions are provided to perform common queries on the metadata:</p>
+<ul>
+<li><code>get_icd_labels</code> queries <code>icd_meta_codes</code> and returns only the ICD subcodes and labels for specified codes and years.</li>
+<li><code>get_icd_history</code> queries <code>icd_meta_transitions</code> and returns only the mappings for specified codes and years.</li>
+<li><code>icd_showchanges</code> and <code>icd_showchanges_icd3</code> query <code>icd_meta_transitions</code> and return entries that are affected by changes in the ICD-10-GM versions.</li>
+</ul>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<p>First, we load the ICD10gm package alongside some <a href="https://tidyverse.org">tidyverse packages</a>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(purrr)
+<span class="kw">library</span>(tidyr)
+<span class="kw">library</span>(ICD10gm)</code></pre></div>
+<p>By way of example, we examine the coding of unspecific gastroenteritis (i.e. without identification of a specific cause), a very common diagnosis in primary care. This is currently classified under the ICD-10 code “A09”, which we can lookup for the year 2018 as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_icd_labels</span>(<span class="st">&quot;A09&quot;</span>, <span class="dt">year =</span> <span class="dv">2018</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="left">icd3</th>
+<th align="left">icd_code</th>
+<th align="left">icd_normcode</th>
+<th align="left">icd_sub</th>
+<th align="left">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="left">A09</td>
+<td align="left">A09.-</td>
+<td align="left">A09</td>
+<td align="left">A09</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis infektiösen und nicht näher bezeichneten Ursprungs</td>
+</tr>
+<tr class="even">
+<td align="right">2018</td>
+<td align="left">A09</td>
+<td align="left">A09.0</td>
+<td align="left">A09.0</td>
+<td align="left">A090</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis infektiösen Ursprungs</td>
+</tr>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="left">A09</td>
+<td align="left">A09.9</td>
+<td align="left">A09.9</td>
+<td align="left">A099</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis nicht näher bezeichneten Ursprungs</td>
+</tr>
+</tbody>
+</table>
+<p>Now, we check whether whether this code has been affected by code transitions in any revision since 2003:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">icd_showchanges_icd3</span>(<span class="st">&quot;A09&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">year_from</th>
+<th align="right">year_to</th>
+<th align="left">icd_from</th>
+<th align="left">icd_to</th>
+<th align="left">automatic_forward</th>
+<th align="left">automatic_backward</th>
+<th align="left">change_5</th>
+<th align="left">change_4</th>
+<th align="left">change_3</th>
+<th align="left">change</th>
+<th align="left">icd3</th>
+<th align="left">icd_kapitel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2009</td>
+<td align="right">2010</td>
+<td align="left">A09</td>
+<td align="left">A09.0</td>
+<td align="left"></td>
+<td align="left">A</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">A09</td>
+<td align="left">A</td>
+</tr>
+<tr class="even">
+<td align="right">2009</td>
+<td align="right">2010</td>
+<td align="left">A09</td>
+<td align="left">A09.9</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">A09</td>
+<td align="left">A</td>
+</tr>
+<tr class="odd">
+<td align="right">2009</td>
+<td align="right">2010</td>
+<td align="left">K52.9</td>
+<td align="left">A09.9</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">A09</td>
+<td align="left">A</td>
+</tr>
+</tbody>
+</table>
+<p>Diagnoses that, prior to 2009, were coded as K52.9 are now coded as A09.9. We can investigate exactly what changed by looking the relevant codes for the years 2009 and 2010:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_icd_labels</span>(<span class="dt">icd3 =</span> <span class="kw">c</span>(<span class="st">&quot;A09&quot;</span>, <span class="st">&quot;K52&quot;</span>), <span class="dt">year =</span> <span class="dv">2009</span><span class="op">:</span><span class="dv">2010</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(year, icd_sub) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;K529&quot;</span>) <span class="op">|</span><span class="st"> </span>icd3 <span class="op">==</span><span class="st"> &quot;A09&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(year, icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="left">icd_normcode</th>
+<th align="left">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2009</td>
+<td align="left">A09</td>
+<td align="left">Diarrhoe und Gastroenteritis, vermutlich infektiösen Ursprungs</td>
+</tr>
+<tr class="even">
+<td align="right">2009</td>
+<td align="left">K52.9</td>
+<td align="left">Nichtinfektiöse Gastroenteritis und Kolitis, nicht näher bezeichnet</td>
+</tr>
+<tr class="odd">
+<td align="right">2010</td>
+<td align="left">A09</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis infektiösen und nicht näher bezeichneten Ursprungs</td>
+</tr>
+<tr class="even">
+<td align="right">2010</td>
+<td align="left">A09.0</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis infektiösen Ursprungs</td>
+</tr>
+<tr class="odd">
+<td align="right">2010</td>
+<td align="left">A09.9</td>
+<td align="left">Sonstige und nicht näher bezeichnete Gastroenteritis und Kolitis nicht näher bezeichneten Ursprungs</td>
+</tr>
+<tr class="even">
+<td align="right">2010</td>
+<td align="left">K52.9</td>
+<td align="left">Nichtinfektiöse Gastroenteritis und Kolitis, nicht näher bezeichnet</td>
+</tr>
+</tbody>
+</table>
+<p>Prior to 2010, A09 had been reserved for gastroenteritis of presumed infectious origin (German: <em>vermutlich infektiösen Ursprungs</em>), with unspecified gastroenteritis coded by K52.9. Since 2010, A09.9 codes any unspecified gastroenteritis, with K52.9 reserved for cases determined to be non-infectious. The effect of this change is that A09.9 has replaced K52.9 as the unspecific code used to document the vast majority of routine cases in primary care. Failure to account for this would constitute a major error in medical or epidemiological research.</p>
+</div>
+</div>
+<div id="test-whether-a-string-represents-an-icd-10-gm-code" class="section level2">
+<h2>Test whether a string represents an ICD-10-GM code</h2>
+<p>The function <code>is_icd_code</code> tests whether a character vector represents a valid ICD-10-GM code (i.e. a code listed in the data.frame <code>icd_meta_codes</code>, allowing for alternative code specifications). The test may be limited to a particular version of the ICD-10-GM by specifying the <code>year</code> argument.</p>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<p>The function <code>is_icd_code</code> recognises ICD codes regardless of their formatting, returning <code>TRUE</code> if the string is recognised as an ICD code and <code>FALSE</code> otherwise:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is_icd_code</span>(<span class="kw">c</span>(<span class="st">&quot;E10.1&quot;</span>, <span class="st">&quot;E101&quot;</span>, <span class="st">&quot;E10.1-&quot;</span>, <span class="st">&quot;J44&quot;</span>, <span class="st">&quot;This is not an ICD code&quot;</span>))
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE  TRUE FALSE</span></code></pre></div>
+</div>
+</div>
+<div id="extracting-icd-codes-from-a-string" class="section level2">
+<h2>Extracting ICD codes from a string</h2>
+<p>The function <code>icd_parse</code> extracts all ICD-10 codes from an arbitrary character vector. On the one hand, this may be used as in the <code>icd_expand</code> function to convert ICD-10 codes to a standardised format or extract parts of the code. On the other hand, it may be used to extract potentially many ICD-10 codes from any document that can be converted to text format (perhaps using the <a href="https://CRAN.R-project.org/package=pdftools"><code>pdftools</code> package</a> to scrape a PDF document or <a href="https://CRAN.R-project.org/package=rvest"><code>rvest</code></a> to scrape a website).</p>
+<div id="example-scraping-codes-from-a-website" class="section level3">
+<h3>Example: Scraping codes from a website</h3>
+<p>As an example of how ICD10gm can be used to extract ICD codes from arbitrary text, the following code uses the rvest package to scrape the code block “A00-A09” from the online version of the DIMDI ICD-10-GM reference. We apply the filter to exclude codes below A10, thus revealing which other ICD-10 codes are reference from this block. To simply the package building process, the code has not been evaluated. This is left as an exercise to the reader.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(rvest)
+
+<span class="kw">read_html</span>(<span class="st">&quot;https://www.dimdi.de/static/de/klassifikationen/icd/icd-10-gm/kode-suche/htmlgm2018/block-a00-a09.htm&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_text</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">icd_parse</span>(<span class="dt">type =</span> <span class="st">&quot;bounded&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>icd_spec) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">&gt;=</span><span class="st"> &quot;A10&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(icd_sub) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(
+    <span class="kw">get_icd_labels</span>(<span class="dt">year =</span> <span class="dv">2018</span>)[, <span class="kw">c</span>(<span class="st">&quot;icd_sub&quot;</span>, <span class="st">&quot;icd_normcode&quot;</span>, <span class="st">&quot;label&quot;</span>)],
+    <span class="dt">by =</span> <span class="st">&quot;icd_sub&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>,
+               <span class="dt">caption =</span> <span class="st">&quot;Additional ICD-10 codes referred to in block A00-A09 (Intestional infectious diseases) of the ICD-10-GM (2018).&quot;</span>)</code></pre></div>
+</div>
+</div>
+<div id="expand-a-icd-specification-down-the-hierarchy" class="section level2">
+<h2>Expand a ICD specification down the hierarchy</h2>
+<p>The function <code>icd_expand</code> takes a data.frame containing ICD codes and optional metadata as input. It returns a data.frame containing all ICD codes at or below the specified level of the hierarchy (e.g. the specification “E11” is expanded to include all three, four and five-digit codes beginning with E11). Expansion is done within a specified version of the ICD-10-GM (e.g. year 2018).</p>
+<div id="example-1" class="section level3">
+<h3>Example</h3>
+<p>Irritable bowel syndrome is coded using either the three-digit code K58 (conceiving IBS as the somatic condition) or the code F45.32 (focussing on IBS as a psychosomatic condition). We can retrieve all subcodes in the year 2019 as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd_k58 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DIAG_GROUP =</span> <span class="kw">c</span>(<span class="st">&quot;IBS&quot;</span>, <span class="st">&quot;IBS&quot;</span>), <span class="dt">ICD_SPEC =</span> <span class="kw">c</span>(<span class="st">&quot;K58&quot;</span>, <span class="st">&quot;F45.32&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">icd_expand</span>(<span class="dt">col_icd =</span> <span class="st">&quot;ICD_SPEC&quot;</span>, <span class="dt">year =</span> <span class="dv">2019</span>, <span class="dt">col_meta =</span> <span class="st">&quot;DIAG_GROUP&quot;</span>)
+  
+knitr<span class="op">::</span><span class="kw">kable</span>(icd_k58)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">icd_spec</th>
+<th align="left">DIAG_GROUP</th>
+<th align="right">year</th>
+<th align="left">icd3</th>
+<th align="left">icd_code</th>
+<th align="left">icd_normcode</th>
+<th align="left">icd_sub</th>
+<th align="left">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">K58</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">K58</td>
+<td align="left">K58.-</td>
+<td align="left">K58</td>
+<td align="left">K58</td>
+<td align="left">Reizdarmsyndrom</td>
+</tr>
+<tr class="even">
+<td align="left">K58</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">K58</td>
+<td align="left">K58.1</td>
+<td align="left">K58.1</td>
+<td align="left">K581</td>
+<td align="left">Reizdarmsyndrom, Diarrhoe-prädominant [RDS-D]</td>
+</tr>
+<tr class="odd">
+<td align="left">K58</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">K58</td>
+<td align="left">K58.2</td>
+<td align="left">K58.2</td>
+<td align="left">K582</td>
+<td align="left">Reizdarmsyndrom, Obstipations-prädominant [RDS-O]</td>
+</tr>
+<tr class="even">
+<td align="left">K58</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">K58</td>
+<td align="left">K58.3</td>
+<td align="left">K58.3</td>
+<td align="left">K583</td>
+<td align="left">Reizdarmsyndrom mit wechselnden (gemischten) Stuhlgewohnheiten [RDS-M]</td>
+</tr>
+<tr class="odd">
+<td align="left">K58</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">K58</td>
+<td align="left">K58.8</td>
+<td align="left">K58.8</td>
+<td align="left">K588</td>
+<td align="left">Sonstiges und nicht näher bezeichnetes Reizdarmsyndrom</td>
+</tr>
+<tr class="even">
+<td align="left">F4532</td>
+<td align="left">IBS</td>
+<td align="right">2019</td>
+<td align="left">F45</td>
+<td align="left">F45.32</td>
+<td align="left">F45.32</td>
+<td align="left">F4532</td>
+<td align="left">Somatoforme autonome Funktionsstörung: Unteres Verdauungssystem</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the <code>data.frame</code> containing the specification should normally be stored as a separate metadata file (eg. csv or Excel format) to facilitate maintenance and sharing of the specification. The column <code>DIAG_GROUP</code> is a label that can be allocated to one or multiple rows of the specification and is useful when aggregating diagnoses. This is similar to the concept of diagnosis groupers used, for example, in risk adjustment schemes (e.g. as operated by the <a href="https://www.bundesversicherungsamt.de/risikostrukturausgleich.html">German Federal Social Insurance Office</a>). In this case, we may want to treat the two alternative codes as equivalent by allocating the label “IBS” to both. In this way, we overcome the common problem that, in practice, multiple codes are used to document the same underlying disease.</p>
+</div>
+</div>
+<div id="historise-an-icd-specification" class="section level2">
+<h2>Historise an ICD specification</h2>
+<p>The function <code>icd_history</code> takes the result of <code>icd_expand</code>, specified for a particular year, and returns a data.frame containing all corresponding codes for the specified years (from 2003). To do this, it applies the ICD-10-GM transition tables to map codes between successive ICD-10-GM versions. Only automatic transitions are followed to ensure that the specification retains its meaning. Custom transitions, tailored to the needs of the project at hand, can be specified to yield a more complete history.</p>
+</div>
+<div id="example-2" class="section level2">
+<h2>Example</h2>
+<p>We historise the code K58, specified for the year 2019, backwards to obtain the corresponding codes for the years 2017 to 2019:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">icd_history</span>(icd_k58, <span class="dt">years =</span> <span class="dv">2017</span><span class="op">:</span><span class="dv">2019</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(icd_spec, DIAG_GROUP, year, icd_code) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(year, icd_code)
+<span class="co">#&gt; # A tibble: 12 x 4</span>
+<span class="co">#&gt;    icd_spec DIAG_GROUP  year icd_code</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt; &lt;chr&gt;   </span>
+<span class="co">#&gt;  1 F4532    IBS         2017 F45.32  </span>
+<span class="co">#&gt;  2 K58      IBS         2017 K58.0   </span>
+<span class="co">#&gt;  3 K58      IBS         2017 K58.9   </span>
+<span class="co">#&gt;  4 F4532    IBS         2018 F45.32  </span>
+<span class="co">#&gt;  5 K58      IBS         2018 K58.0   </span>
+<span class="co">#&gt;  6 K58      IBS         2018 K58.9   </span>
+<span class="co">#&gt;  7 F4532    IBS         2019 F45.32  </span>
+<span class="co">#&gt;  8 K58      IBS         2019 K58.-   </span>
+<span class="co">#&gt;  9 K58      IBS         2019 K58.1   </span>
+<span class="co">#&gt; 10 K58      IBS         2019 K58.2   </span>
+<span class="co">#&gt; 11 K58      IBS         2019 K58.3   </span>
+<span class="co">#&gt; 12 K58      IBS         2019 K58.8</span></code></pre></div>
+</div>
+</div>
+<div id="copyright" class="section level1">
+<h1>Copyright</h1>
+<p>Program code is released under the <a href="https://edonnachie.github.io/ICD10gm/LICENSE-text.html">MIT license</a>.</p>
+<p>The underlying ICD-10-GM metadata is copyright of the <a href="https://www.dimdi.de">German Instutite of Medical Documentation and Information (DIMDI)</a>. The source files are available free of charge from the <a href="https://www.dimdi.de/dynamic/de/klassifikationen/downloads/?dir=icd-10-gm">DIMDI Download Centre</a>. I believe that their use in this package is compatible with the copyright restrictions. In particular:</p>
+<ul>
+<li><p>The distribution of an “added-value product” derived from the original DIMDI classification files is expressly permitted.</p></li>
+<li><p>Distribution of the original classification files is forbidden. Consequently, this package distributes only the code required to process these files. Those wishing to compile the data from scratch must download the files from the DIMDI download centre and agree to the copyright restrictions.</p></li>
+<li><p>The package does not modify the ICD-10-GM codes, texts or other metadata in any way other than to restructure the data into a convenient form.</p></li>
+<li><p>The package does not contain any commercial advertising.</p></li>
+<li><p>The source of the data is clearly stated, both here and in the main package documentation.</p></li>
+</ul>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>The ICD10gm package provides a convenient means of accessing and manipulating the German modification of the ICD-10 classification. It is designed for use in medical, epidemiological and health services research.</p>
+<p>To the author’s knowledge, this package represents the only publicly available repository of pre-processed metadata for the ICD-10-GM. Indeed, a key contribution of the package is the compilation and processing of the metadata provided by DIMDI, which is designed more for the needs of operational use than for the purpose of longitudinal secondary data analysis.</p>
+<p>Building on the metadata, the ICD10gm package provides various functions to facilitate the analysis of ICD-10 data. Possible uses include:</p>
+<ul>
+<li><p>Calculating the administrative prevalence of diseases over time, accounting for changes to the ICD-10-GM classification.</p></li>
+<li><p>The extraction of ICD-10 codes for the purposes of text mining.</p></li>
+<li><p>The implementation of diagnoses grouping systems for the representation of patient morbidity.</p></li>
+</ul>
+<div id="related-packages" class="section level2">
+<h2>Related Packages</h2>
+<p>The <a href="https://CRAN.R-project.org/package=icd">icd package</a> has similar aims but has a slightly different approach and focusses on the US version of the ICD-10 system.</p>
+</div>
+<div id="cite" class="section level2">
+<h2>Cite</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; To cite package 'ICD10gm' in publications use:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   Ewan Donnachie (2019). ICD10gm: Metadata Processing for the</span>
+<span class="co">#&gt;   German Modification of the ICD-10 Coding System.</span>
+<span class="co">#&gt;   https://github.com/edonnachie/ICD10gm,</span>
+<span class="co">#&gt;   https://doi.org/10.5281/zenodo.2542833.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   @Manual{,</span>
+<span class="co">#&gt;     title = {ICD10gm: Metadata Processing for the German Modification of the ICD-10 Coding System},</span>
+<span class="co">#&gt;     author = {Ewan Donnachie},</span>
+<span class="co">#&gt;     year = {2019},</span>
+<span class="co">#&gt;     note = {https://github.com/edonnachie/ICD10gm, https://doi.org/10.5281/zenodo.2542833},</span>
+<span class="co">#&gt;   }</span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
