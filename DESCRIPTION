@@ -1,8 +1,8 @@
 Package: ICD10gm
 Title: Metadata Processing for the German Modification of the ICD-10
         Coding System
-Version: 1.0.3
-Date: 2019-02-05
+Version: 1.0.4
+Date: 2019-08-21
 Authors@R: c(
     person("Ewan", "Donnachie", , "ewan@donnachie.net", c("aut", "cre"), , comment = c(ORCID = "0000-0002-0668-0049"))
   )
@@ -14,14 +14,15 @@ URL: https://github.com/edonnachie/ICD10gm,
 BugReports: https://github.com/edonnachie/ICD10gm/issues
 LazyData: true
 RoxygenNote: 6.1.1
-Imports: magrittr, dplyr, purrr, tidyr, stringi, rlang, tibble
+Imports: magrittr, dplyr, purrr, tidyr, tidyselect, stringi, rlang,
+        tibble
 Suggests: testthat, knitr, rmarkdown, rvest
 VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-GB
 NeedsCompilation: no
-Packaged: 2019-02-07 13:04:35 UTC; ewan
+Packaged: 2019-08-21 21:40:23 UTC; ewan
 Author: Ewan Donnachie [aut, cre] (<https://orcid.org/0000-0002-0668-0049>)
 Maintainer: Ewan Donnachie <ewan@donnachie.net>
 Repository: CRAN
-Date/Publication: 2019-02-12 17:30:07 UTC
+Date/Publication: 2019-08-21 22:00:02 UTC

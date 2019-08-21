@@ -15,7 +15,7 @@
 #' @return data.frame with columns YEAR, ICD_CODE, ICD_COMPRESSED, ICD_LABEL and, if specified, columns specified by col_meta
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-#' @importFrom rlang !!!
+#' @importFrom tidyselect one_of
 #' @examples
 #' # Incomplete or non-terminal codes expand to the right.
 #' # This is useful to specified code blocks in a compact manner
@@ -97,14 +97,24 @@ icd_expand <- function (icd_in,
   }
 
   # Expand each specified code in turn
-  # The tidy evaluation with group_by is taken from here:
-  # https://stackoverflow.com/questions/47993471/tidyeval-with-list-of-column-names-in-a-function
-  icd_expand <- icd_in %>%
-    dplyr::group_by(!!!rlang::syms(as.list(cols_keep))) %>%
-    tidyr::nest() %>%
-    dplyr::mutate(data = purrr::map(.data$icd_spec, do_expand,
-                                    icd_labels = icd_labels)) %>%
-    tidyr::unnest()
+  # Due to breaking changes in tidyr 1.0,
+  # we need two versions of unnest,
+  # implemented in the following function
+  # See https://tidyr.tidyverse.org/dev/articles/in-packages.html
+  unnest_icd_expand <- function(df) {
+    if (utils::packageVersion("tidyr") > "0.8.99") {
+      tidyr::unnest(df, cols = tidyselect::one_of("data"))
+    } else {
+      tidyr::unnest(df)
+    }
+  }
 
-  return(icd_expand)
+  icd_expand <- icd_in %>%
+    dplyr::select(tidyselect::one_of(cols_keep)) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(data = purrr::map(.data$icd_spec, do_expand,
+                                   icd_labels = icd_labels)) %>%
+    unnest_icd_expand()
+
+  return(tibble::as_tibble(icd_expand))
 }
