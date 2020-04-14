@@ -3,8 +3,8 @@
 \docType{data}
 \name{icd_meta_blocks}
 \alias{icd_meta_blocks}
-\title{Metadata for the ICD-10-GM code blocks}
-\format{An object of class \code{data.frame} with 3831 rows and 6 columns.}
+\title{data.frame containing metadata for the ICD-10-GM code blocks}
+\format{An object of class \code{data.frame} with 4071 rows and 6 columns.}
 \source{
 The source data was downloaded from the official download centre
 of the German Institute for Medical Documentation and Information (DIMDI).
@@ -15,12 +15,12 @@ icd_meta_blocks
 }
 \description{
 The ICD blocks (German: "Gruppen") constitute a level in the hierarchy
-between the chapters and the three-digit categories.
-Sequential codes are grouped to form 240 groups that
-represent similar aetiological diagnoses. Unlike other grouper systems,
-the ICD blocks do not consider similar diagnoses from different chapters of
-the ICD classification, for example chronic pain as a unspecific symptom
-(R52.1) and as a somatoform disorder (F45.4).
+between the chapters and the three-digit codes. The three-digit code are
+grouped in sequence to form 240 groups that represent similar aetiological
+diagnoses. Unlike some other grouper systems, the ICD blocks do not consider
+similar diagnoses from different chapters of the ICD classification, for
+example chronic pain coded as a unspecific symptom (R52.1) and as a
+somatoform disorder (F45.4).
 }
 \details{
 \describe{
@@ -32,4 +32,11 @@ the ICD classification, for example chronic pain as a unspecific symptom
 \item{block_id}{Short label for the block in format "A00-A09"}
 }
 }
+\seealso{
+Other ICD-10-GM metadata: 
+\code{\link{icd_meta_chapters}},
+\code{\link{icd_meta_codes}},
+\code{\link{icd_meta_transition}}
+}
+\concept{ICD-10-GM metadata}
 \keyword{datasets}

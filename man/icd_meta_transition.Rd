@@ -3,8 +3,8 @@
 \docType{data}
 \name{icd_meta_transition}
 \alias{icd_meta_transition}
-\title{Transition between ICD-10-GM versions}
-\format{An object of class \code{data.frame} with 201295 rows and 12 columns.}
+\title{data.frame detailling the changes in ICD-10-GM codes between versions}
+\format{An object of class \code{data.frame} with 215033 rows and 12 columns.}
 \source{
 The source data was downloaded from the official download centre
 of the German Institute for Medical Documentation and Information (DIMDI).
@@ -14,7 +14,8 @@ See also \url{https://www.dimdi.de/dynamic/en/classifications/icd/icd-10-gm/tabu
 icd_meta_transition
 }
 \description{
-A data.frame providing old and new ICD codes (identical if no changes)
+A data.frame providing old and new ICD codes
+(identical if no changes)
 and information as to whether the transition is automatic when
 transitioning forwards or backwards
 }
@@ -33,4 +34,11 @@ transitioning forwards or backwards
 \item{icd_chapter}{The first character of \code{icd_from} (i.e. the letter denoting the chapter).}
 }
 }
+\seealso{
+Other ICD-10-GM metadata: 
+\code{\link{icd_meta_blocks}},
+\code{\link{icd_meta_chapters}},
+\code{\link{icd_meta_codes}}
+}
+\concept{ICD-10-GM metadata}
 \keyword{datasets}

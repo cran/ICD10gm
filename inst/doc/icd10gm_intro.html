@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Ewan Donnachie" />
 
-<meta name="date" content="2019-08-21" />
+<meta name="date" content="2020-04-08" />
 
 <title>Introduction to the ICD10gm Package</title>
 
@@ -21,9 +20,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -33,14 +32,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -49,9 +50,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,9 +119,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +287,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -305,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h1 class="title toc-ignore">Introduction to the ICD10gm Package</h1>
 <h3 class="subtitle">Motivation, Basic Usage and Examples</h3>
 <h4 class="author">Ewan Donnachie</h4>
-<h4 class="date">2019-08-21</h4>
+<h4 class="date">2020-04-08</h4>
 
 
 
@@ -324,7 +323,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ol>
 <p>ICD10gm is designed for use in the context of medical and health services research using routinely collected claims data. It is not suitable for use in operative coding as it does not include all relevant metadata (e.g. inclusion and exclusion notes and the detailed definitions of psychiatric diagnoses). The metadata provided in the ICD10gm package is not intended to replace the <a href="https://www.dimdi.de/dynamic/de/klassifikationen/icd/icd-10-gm/">official DIMDI documentation</a>, which should always be consulted when specifying ICD codes for analysis.</p>
 <p>The following presents an overview of the basic functionality provided by the ICD10gm package, illustrated by means of simple examples. To access this vignette in R, type:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">vignette</span>(<span class="st">&quot;icd10gm_intro&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">vignette</span>(<span class="st">&quot;icd10gm_intro&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="basic-use" class="section level1">
@@ -349,13 +348,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="example" class="section level3">
 <h3>Example</h3>
 <p>First, we load the ICD10gm package alongside some <a href="https://tidyverse.org">tidyverse packages</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">library</span>(ICD10gm)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">library</span>(ICD10gm)</span></code></pre></div>
 <p>By way of example, we examine the coding of unspecific gastroenteritis (i.e. without identification of a specific cause), a very common diagnosis in primary care. This is currently classified under the ICD-10 code “A09”, which we can lookup for the year 2018 as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">get_icd_labels</span>(<span class="st">&quot;A09&quot;</span>, <span class="dt">year =</span> <span class="dv">2018</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">get_icd_labels</span>(<span class="st">&quot;A09&quot;</span>, <span class="dt">year =</span> <span class="dv">2018</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -395,8 +394,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>Now, we check whether whether this code has been affected by code transitions in any revision since 2003:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">icd_showchanges_icd3</span>(<span class="st">&quot;A09&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">icd_showchanges_icd3</span>(<span class="st">&quot;A09&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -460,11 +459,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>Diagnoses that, prior to 2009, were coded as K52.9 are now coded as A09.9. We can investigate exactly what changed by looking the relevant codes for the years 2009 and 2010:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">get_icd_labels</span>(<span class="dt">icd3 =</span> <span class="kw">c</span>(<span class="st">&quot;A09&quot;</span>, <span class="st">&quot;K52&quot;</span>), <span class="dt">year =</span> <span class="dv">2009</span><span class="op">:</span><span class="dv">2010</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">arrange</span>(year, icd_sub) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;K529&quot;</span>) <span class="op">|</span><span class="st"> </span>icd3 <span class="op">==</span><span class="st"> &quot;A09&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(year, icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">get_icd_labels</span>(<span class="dt">icd3 =</span> <span class="kw">c</span>(<span class="st">&quot;A09&quot;</span>, <span class="st">&quot;K52&quot;</span>), <span class="dt">year =</span> <span class="dv">2009</span><span class="op">:</span><span class="dv">2010</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">arrange</span>(year, icd_sub) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;K529&quot;</span>) <span class="op">|</span><span class="st"> </span>icd3 <span class="op">==</span><span class="st"> &quot;A09&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">select</span>(year, icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -515,8 +514,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="examples" class="section level3">
 <h3>Examples</h3>
 <p>The function <code>is_icd_code</code> recognises ICD codes regardless of their formatting, returning <code>TRUE</code> if the string is recognised as an ICD code and <code>FALSE</code> otherwise:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">is_icd_code</span>(<span class="kw">c</span>(<span class="st">&quot;E10.1&quot;</span>, <span class="st">&quot;E101&quot;</span>, <span class="st">&quot;E10.1-&quot;</span>, <span class="st">&quot;J44&quot;</span>, <span class="st">&quot;This is not an ICD code&quot;</span>))</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [1]  TRUE  TRUE  TRUE  TRUE FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">is_icd_code</span>(<span class="kw">c</span>(<span class="st">&quot;E10.1&quot;</span>, <span class="st">&quot;E101&quot;</span>, <span class="st">&quot;E10.1-&quot;</span>, <span class="st">&quot;J44&quot;</span>, <span class="st">&quot;This is not an ICD code&quot;</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1]  TRUE  TRUE  TRUE  TRUE FALSE</span></span></code></pre></div>
 </div>
 </div>
 <div id="extracting-icd-codes-from-a-string" class="section level2">
@@ -525,22 +524,22 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="example-scraping-codes-from-a-website" class="section level3">
 <h3>Example: Scraping codes from a website</h3>
 <p>As an example of how ICD10gm can be used to extract ICD codes from arbitrary text, the following code uses the rvest package to scrape the code block “A00-A09” from the online version of the DIMDI ICD-10-GM reference. We apply the filter to exclude codes below A10, thus revealing which other ICD-10 codes are reference from this block. To simply the package building process, the code has not been evaluated. This is left as an exercise to the reader.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">library</span>(rvest)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">read_html</span>(<span class="st">&quot;https://www.dimdi.de/static/de/klassifikationen/icd/icd-10-gm/kode-suche/htmlgm2018/block-a00-a09.htm&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">html_text</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw">icd_parse</span>(<span class="dt">type =</span> <span class="st">&quot;bounded&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>icd_spec) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">&gt;=</span><span class="st"> &quot;A10&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="st">  </span><span class="kw">arrange</span>(icd_sub) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="st">  </span><span class="kw">left_join</span>(</a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">    <span class="kw">get_icd_labels</span>(<span class="dt">year =</span> <span class="dv">2018</span>)[, <span class="kw">c</span>(<span class="st">&quot;icd_sub&quot;</span>, <span class="st">&quot;icd_normcode&quot;</span>, <span class="st">&quot;label&quot;</span>)],</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13">    <span class="dt">by =</span> <span class="st">&quot;icd_sub&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="st">  </span><span class="kw">select</span>(icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb7-16" data-line-number="16">               <span class="dt">caption =</span> <span class="st">&quot;Additional ICD-10 codes referred to in block A00-A09 (Intestional infectious diseases) of the ICD-10-GM (2018).&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">library</span>(rvest)</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">read_html</span>(<span class="st">&quot;https://www.dimdi.de/static/de/klassifikationen/icd/icd-10-gm/kode-suche/htmlgm2018/block-a00-a09.htm&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  </span><span class="kw">html_text</span>() <span class="op">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  </span><span class="kw">icd_parse</span>(<span class="dt">type =</span> <span class="st">&quot;bounded&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>icd_spec) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="st">  </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="st">  </span><span class="kw">filter</span>(icd_sub <span class="op">&gt;=</span><span class="st"> &quot;A10&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="st">  </span><span class="kw">arrange</span>(icd_sub) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="st">  </span><span class="kw">left_join</span>(</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="kw">get_icd_labels</span>(<span class="dt">year =</span> <span class="dv">2018</span>)[, <span class="kw">c</span>(<span class="st">&quot;icd_sub&quot;</span>, <span class="st">&quot;icd_normcode&quot;</span>, <span class="st">&quot;label&quot;</span>)],</span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="dt">by =</span> <span class="st">&quot;icd_sub&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="st">  </span><span class="kw">select</span>(icd_normcode, label) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">row.names =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb7-16"><a href="#cb7-16"></a>               <span class="dt">caption =</span> <span class="st">&quot;Additional ICD-10 codes referred to in block A00-A09 (Intestional infectious diseases) of the ICD-10-GM (2018).&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="expand-a-icd-specification-down-the-hierarchy" class="section level2">
@@ -549,10 +548,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="example-1" class="section level3">
 <h3>Example</h3>
 <p>Irritable bowel syndrome is coded using either the three-digit code K58 (conceiving IBS as the somatic condition) or the code F45.32 (focussing on IBS as a psychosomatic condition). We can retrieve all subcodes in the year 2019 as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">icd_k58 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DIAG_GROUP =</span> <span class="kw">c</span>(<span class="st">&quot;IBS&quot;</span>, <span class="st">&quot;IBS&quot;</span>), <span class="dt">ICD_SPEC =</span> <span class="kw">c</span>(<span class="st">&quot;K58&quot;</span>, <span class="st">&quot;F45.32&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">icd_expand</span>(<span class="dt">col_icd =</span> <span class="st">&quot;ICD_SPEC&quot;</span>, <span class="dt">year =</span> <span class="dv">2019</span>, <span class="dt">col_meta =</span> <span class="st">&quot;DIAG_GROUP&quot;</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  </a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">knitr<span class="op">::</span><span class="kw">kable</span>(icd_k58)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>icd_k58 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DIAG_GROUP =</span> <span class="kw">c</span>(<span class="st">&quot;IBS&quot;</span>, <span class="st">&quot;IBS&quot;</span>), <span class="dt">ICD_SPEC =</span> <span class="kw">c</span>(<span class="st">&quot;K58&quot;</span>, <span class="st">&quot;F45.32&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">icd_expand</span>(<span class="dt">col_icd =</span> <span class="st">&quot;ICD_SPEC&quot;</span>, <span class="dt">year =</span> <span class="dv">2019</span>, <span class="dt">col_meta =</span> <span class="st">&quot;DIAG_GROUP&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4"></a>knitr<span class="op">::</span><span class="kw">kable</span>(icd_k58)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -639,24 +638,24 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="example-2" class="section level2">
 <h2>Example</h2>
 <p>We historise the code K58, specified for the year 2019, backwards to obtain the corresponding codes for the years 2017 to 2019:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">icd_history</span>(icd_k58, <span class="dt">years =</span> <span class="dv">2017</span><span class="op">:</span><span class="dv">2019</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(icd_spec, DIAG_GROUP, year, icd_code) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(year, icd_code)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; # A tibble: 12 x 4</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;    icd_spec DIAG_GROUP  year icd_code</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt;    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt; &lt;chr&gt;   </span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;  1 F4532    IBS         2017 F45.32  </span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;  2 K58      IBS         2017 K58.0   </span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;  3 K58      IBS         2017 K58.9   </span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  4 F4532    IBS         2018 F45.32  </span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  5 K58      IBS         2018 K58.0   </span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  6 K58      IBS         2018 K58.9   </span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  7 F4532    IBS         2019 F45.32  </span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  8 K58      IBS         2019 K58.-   </span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  9 K58      IBS         2019 K58.1   </span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; 10 K58      IBS         2019 K58.2   </span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; 11 K58      IBS         2019 K58.3   </span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; 12 K58      IBS         2019 K58.8</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">icd_history</span>(icd_k58, <span class="dt">years =</span> <span class="dv">2017</span><span class="op">:</span><span class="dv">2019</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span><span class="kw">select</span>(icd_spec, DIAG_GROUP, year, icd_code) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="st">  </span><span class="kw">arrange</span>(year, icd_code)</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; # A tibble: 12 x 4</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;    icd_spec DIAG_GROUP  year icd_code</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt; &lt;chr&gt;   </span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;  1 F4532    IBS         2017 F45.32  </span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;  2 K58      IBS         2017 K58.0   </span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;  3 K58      IBS         2017 K58.9   </span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;  4 F4532    IBS         2018 F45.32  </span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;  5 K58      IBS         2018 K58.0   </span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;  6 K58      IBS         2018 K58.9   </span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;  7 F4532    IBS         2019 F45.32  </span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;  8 K58      IBS         2019 K58.-   </span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt;  9 K58      IBS         2019 K58.1   </span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; 10 K58      IBS         2019 K58.2   </span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; 11 K58      IBS         2019 K58.3   </span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; 12 K58      IBS         2019 K58.8</span></span></code></pre></div>
 </div>
 </div>
 <div id="copyright" class="section level1">
@@ -687,23 +686,23 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="cite" class="section level2">
 <h2>Cite</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">citation</span>(<span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; To cite package 'ICD10gm' in publications use:</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;   Ewan Donnachie (2019). ICD10gm: Metadata Processing for the</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;   German Modification of the ICD-10 Coding System.</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;   https://github.com/edonnachie/ICD10gm,</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;   https://doi.org/10.5281/zenodo.2542833.</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;   @Manual{,</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;     title = {ICD10gm: Metadata Processing for the German Modification of the ICD-10 Coding System},</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;     author = {Ewan Donnachie},</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;     year = {2019},</span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;     note = {https://github.com/edonnachie/ICD10gm, https://doi.org/10.5281/zenodo.2542833},</span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;   }</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">citation</span>(<span class="dt">package =</span> <span class="st">&quot;ICD10gm&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; To cite package &#39;ICD10gm&#39; in publications use:</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;   Ewan Donnachie (2020). ICD10gm: Metadata Processing for the German</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;   Modification of the ICD-10 Coding System.</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;   https://edonnachie.github.io/ICD10gm,</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;   https://doi.org/10.5281/zenodo.2542833.</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; </span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;   @Manual{,</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt;     title = {ICD10gm: Metadata Processing for the German Modification of the ICD-10 Coding System},</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt;     author = {Ewan Donnachie},</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt;     year = {2020},</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt;     note = {https://edonnachie.github.io/ICD10gm, https://doi.org/10.5281/zenodo.2542833},</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt;   }</span></span></code></pre></div>
 </div>
 </div>
 

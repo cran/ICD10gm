@@ -1,4 +1,4 @@
-#' Metadata for all ICD-10-GM codes
+#' data.frame containing metadata for all ICD-10-GM codes
 #'
 #' DIMDI provide a CSV file with metadata on all valid codes. This table is
 #' read in with only minor modifications to facilitate changes between versions.
@@ -9,6 +9,16 @@
 #' (where present, mainly in Chapter V). DIMDI provide additional reference
 #' material for operative coding and detailed research.
 #'
+#' The block U00-U49 contains reserved codes that can be allocated quickly for
+#' the documentation of new diseases or epidemiological phenomena. Such usage
+#' is allowed only when mandated by DIMDI. In particular, the codes may not be
+#' utilised on the initiative of other parties, for example, for clinical trials
+#' or contractual purposes. Notable uses of the reserved codes are for the Zika
+#' and COVID-19 viruses. These are included in the DIMDI online documentation,
+#' but not in the download files. They are therefore added manually to this
+#' data set as documented in the [package source](https://github.com/edonnachie/ICD10gm/blob/master/data-raw/additions/icd_meta_codes_additions.json).
+#'
+#' Die Schlüsselnummern U05.0-U05.9 dieser Kategorie sollen ein schnelles Reagieren auf aktuelle epidemiologische Phänomene ermöglichen. Sie dürfen nur zusätzlich benutzt werden, um einen anderenorts klassifizierten Zustand besonders zu kennzeichnen. Die Schlüsselnummern dieser Kategorie dürfen nur über das Deutsche Institut für Medizinische Dokumentation und Information (DIMDI) mit Inhalten belegt werden; eine Anwendung für andere Zwecke ist nicht erlaubt. DIMDI wird den Anwendungszeitraum solcher Schlüsselnummern bei Bedarf bekannt geben.
 #'
 #' @format A data.frame containing the following variables:
 #' \describe{
@@ -20,7 +30,7 @@
 #'   \item{icd_block_first}{First code in the respective ICD block, can be used to join with the table ICD10gm::icd_meta_blocks}
 #'   \item{icd_code}{Full icd code (up to 7 characters) with all symbols except the "dagger" (for aetiological codes that can be combined with an "asterisk" code to denote the manifestation)}
 #'   \item{icd_normcode}{The ICD "normcode", consisting of up to 6 characters and without all symbols except the period (e.g. E11.30)}
-#'   \item{icd_sub}{The ICD "normcode", consisting of up to 5 characters and without any symbols (e.g. E1130)}
+#'   \item{icd_sub}{Complete ICD code without any symbols or punctuation, consisting of up to 5 characters  (e.g. E1130)}
 #'   \item{label}{ICD label for the complete code.}
 #'   \item{label_icd3}{ICD label for the three-digit ICD code.}
 #'   \item{label_icd4}{ICD label for fourth digit of the ICD code.}
@@ -43,20 +53,21 @@
 #'   \item{notifiable_lab}{Indicates whether the diagnosis is notifiable for laboratories in Germany (J: yes; N: no)}
 #' }
 #'
+#' @family ICD-10-GM metadata
 #' @source The source data was downloaded from the official download centre
 #' of the German Institute for Medical Documentation and Information (DIMDI).
 #' See also \url{https://www.dimdi.de/dynamic/en/classifications/icd/icd-10-gm/tabular-list/#metadata}
 "icd_meta_codes"
 
-#' Metadata for the ICD-10-GM code blocks
+#' data.frame containing metadata for the ICD-10-GM code blocks
 #'
 #' The ICD blocks (German: "Gruppen") constitute a level in the hierarchy
-#' between the chapters and the three-digit categories.
-#' Sequential codes are grouped to form 240 groups that
-#' represent similar aetiological diagnoses. Unlike other grouper systems,
-#' the ICD blocks do not consider similar diagnoses from different chapters of
-#' the ICD classification, for example chronic pain as a unspecific symptom
-#' (R52.1) and as a somatoform disorder (F45.4).
+#' between the chapters and the three-digit codes. The three-digit code are
+#' grouped in sequence to form 240 groups that represent similar aetiological
+#' diagnoses. Unlike some other grouper systems, the ICD blocks do not consider
+#' similar diagnoses from different chapters of the ICD classification, for
+#' example chronic pain coded as a unspecific symptom (R52.1) and as a
+#' somatoform disorder (F45.4).
 #'
 #' \describe{
 #'   \item{year}{Year of validity (from 2004)}
@@ -67,13 +78,14 @@
 #'   \item{block_id}{Short label for the block in format "A00-A09"}
 #' }
 #'
+#' @family ICD-10-GM metadata
 #' @source The source data was downloaded from the official download centre
 #' of the German Institute for Medical Documentation and Information (DIMDI).
 #' See also \url{https://www.dimdi.de/dynamic/en/classifications/icd/icd-10-gm/tabular-list/structure/}
 "icd_meta_blocks"
 
 
-#' Metadata for the ICD-10-GM chapters
+#' data.frame containing metadata for the ICD-10-GM chapters
 #'
 #' The ICD chapters group codes according to their aetiology.
 #'
@@ -84,14 +96,16 @@
 #'   \item{chapter_label}{Label for the chapter}
 #' }
 #'
+#' @family ICD-10-GM metadata
 #' @source The source data was downloaded from the official download centre
 #' of the German Institute for Medical Documentation and Information (DIMDI).
 #' See also \url{https://www.dimdi.de/dynamic/en/classifications/icd/icd-10-gm/tabular-list/structure/}
 "icd_meta_chapters"
 
-#' Transition between ICD-10-GM versions
+#' data.frame detailling the changes in ICD-10-GM codes between versions
 #'
-#' A data.frame providing old and new ICD codes (identical if no changes)
+#' A data.frame providing old and new ICD codes
+#' (identical if no changes)
 #' and information as to whether the transition is automatic when
 #' transitioning forwards or backwards
 #'
@@ -109,12 +123,23 @@
 #'   \item{icd_chapter}{The first character of `icd_from` (i.e. the letter denoting the chapter).}
 #' }
 #
+#' @family ICD-10-GM metadata
 #' @source The source data was downloaded from the official download centre
 #' of the German Institute for Medical Documentation and Information (DIMDI).
 #' See also \url{https://www.dimdi.de/dynamic/en/classifications/icd/icd-10-gm/tabular-list/#crosswalks}
 "icd_meta_transition"
 
 
+#' Get or query ICD-10 labels
+#'
+#' A utility function to get or query [icd_meta_codes],
+#' returning a limited selection of ICD-10 codes and labels.
+#'
+#' If an ICD code is provided as argument `icd3`, all
+#' corresponding codes and subcodes are returned. If a search
+#' term is provided, all codes are returned whose label matches
+#' the string approximately.
+#'
 #' Returns a data frame with ICD metadata, consisting of
 #' year, ICD code and label. Optional arguments allow selection of
 #' entries by year, code or label. This is beneficial because the
@@ -145,6 +170,10 @@ get_icd_labels <- function(year = NULL, icd3 = NULL, search = NULL, ...){
    return(out)
 }
 
+#' Get ICD history metadata
+#'
+#' A utility function to query the [icd_meta_transition] table.
+#'
 #' Returns a data frame with ICD transition history, consisting of
 #' year, ICD code and label. Optional arguments allow selection of
 #' entries by year or ICD code. This is beneficial because the
