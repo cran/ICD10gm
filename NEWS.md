@@ -1,4 +1,20 @@
-# ICD10gm 1.2
+# ICD10gm 1.2.4
+This is a minor update:
+
+- Data for the year 2022
+- Corrected `charlson_rcs` specification (F00-F03 on separate lines, #16)
+- Replaced `icd_showchanges` with an equivalent query on `icd_meta_transitions`. The new function takes a data.frame created by `icd_expand`, extracts all code changes within a specified period (years), and adds labels for the old and new ICD-10-GM codes.
+- (From 1.2.3): Corrected "no visible binding" error on icd_showchanges
+
+# ICD10gm 1.2.3
+This is a minor update:
+
+- Data for the year 2022
+- Corrected `charlson_rcs` specification (F00-F03 on separate lines, #16)
+- Replaced `icd_showchanges` with an equivalent query on `icd_meta_transitions`. The new function takes a data.frame created by `icd_expand`, extracts all code changes within a specified period (years), and adds labels for the old and new ICD-10-GM codes.
+
+
+# ICD10gm 1.2.2
 This is a minor update:
 
 - Added new ICD-10-GM data for the year 2021

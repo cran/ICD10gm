@@ -21,10 +21,10 @@ icd_showchanges_icd3 <- function(icd3){
 #' The output of icd_expand can be passed directly to this
 #' function to display relevant changes.
 #'
-#' @param icd_in Data frame defining ICD codes of interest
-#' @param col_icd Column of icd_in containing ICD codes (Default: ICD)
-#' @return data.frame with columns YEAR, ICD_CODE, ICD_LABEL and, if specified, DIAG_GROUP
-#' @seealso [icd_showchanges_icd3()] to provide one oe more three-digit codes as input
+#' @param icd_in Data frame created by  [icd_expand()], containing codes to check
+#' @param years Years to check, corresponding to the variable `year_from` in `icd_meta_transition`
+#' @return data.frame, as `icd_meta_transition`, with labels icd_from_label and icd_to_label
+#' @seealso [icd_showchanges_icd3()] to provide one or more three-digit codes as input
 #' @examples
 #' dat_icd <- icd_expand(
 #'    data.frame(ICD_SPEC = c("K52.9")),
@@ -32,8 +32,32 @@ icd_showchanges_icd3 <- function(icd3){
 #'    year = 2019)
 #' icd_showchanges(dat_icd)
 #'
+#' @importFrom rlang .data
 #' @export
-icd_showchanges <- function(icd_in, col_icd = "icd_sub"){
-	icd3_in <- unique(substr(icd_in[, col_icd], 1, 3))
-	icd_showchanges_icd3(icd3_in)
+icd_showchanges <- function(icd_in, years=NULL) {
+
+  if (is.null(years)) {
+    years <- min(ICD10gm::icd_meta_transition$year_from):max(ICD10gm::icd_meta_transition$year_from)
+  }
+
+  ICD10gm::icd_meta_transition %>%
+    # Only interested in codes that have changed
+    dplyr::filter(.data$change) %>%
+    # Restrict to the years of interest
+    dplyr::filter(.data$year_from %in% years) %>%
+    # Restrict to the codes contained in dat_icd
+    dplyr::semi_join(icd_in, by = c("icd_from" = "icd_normcode")) %>%
+    # Add labels
+    dplyr::inner_join(ICD10gm::icd_meta_codes %>%
+                        dplyr::select(.data$icd_normcode, .data$year, .data$label) %>%
+                        dplyr::rename(icd_from_label = .data$label),
+                      by = c("icd_from" = "icd_normcode",
+                             "year_from" = "year")) %>%
+    dplyr::inner_join(
+      ICD10gm::icd_meta_codes %>%
+        dplyr::select(.data$icd_normcode, .data$year, .data$label) %>%
+        dplyr::rename(icd_to_label = .data$label),
+      by = c("icd_to" = "icd_normcode",
+             "year_to" = "year")
+    )
 }

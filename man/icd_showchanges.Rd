@@ -4,15 +4,15 @@
 \alias{icd_showchanges}
 \title{Show historical changes to selected ICD-10-GM codes}
 \usage{
-icd_showchanges(icd_in, col_icd = "icd_sub")
+icd_showchanges(icd_in, years = NULL)
 }
 \arguments{
-\item{icd_in}{Data frame defining ICD codes of interest}
+\item{icd_in}{Data frame created by  \code{\link[=icd_expand]{icd_expand()}}, containing codes to check}
 
-\item{col_icd}{Column of icd_in containing ICD codes (Default: ICD)}
+\item{years}{Years to check, corresponding to the variable \code{year_from} in \code{icd_meta_transition}}
 }
 \value{
-data.frame with columns YEAR, ICD_CODE, ICD_LABEL and, if specified, DIAG_GROUP
+data.frame, as \code{icd_meta_transition}, with labels icd_from_label and icd_to_label
 }
 \description{
 Show all changes in ICD history relating to the
@@ -29,5 +29,5 @@ icd_showchanges(dat_icd)
 
 }
 \seealso{
-\code{\link[=icd_showchanges_icd3]{icd_showchanges_icd3()}} to provide one oe more three-digit codes as input
+\code{\link[=icd_showchanges_icd3]{icd_showchanges_icd3()}} to provide one or more three-digit codes as input
 }
