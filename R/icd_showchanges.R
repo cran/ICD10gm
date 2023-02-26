@@ -49,14 +49,14 @@ icd_showchanges <- function(icd_in, years=NULL) {
     dplyr::semi_join(icd_in, by = c("icd_from" = "icd_normcode")) %>%
     # Add labels
     dplyr::inner_join(ICD10gm::icd_meta_codes %>%
-                        dplyr::select(.data$icd_normcode, .data$year, .data$label) %>%
-                        dplyr::rename(icd_from_label = .data$label),
+                        dplyr::select("icd_normcode", "year", "label") %>%
+                        dplyr::rename(icd_from_label = "label"),
                       by = c("icd_from" = "icd_normcode",
                              "year_from" = "year")) %>%
     dplyr::inner_join(
       ICD10gm::icd_meta_codes %>%
-        dplyr::select(.data$icd_normcode, .data$year, .data$label) %>%
-        dplyr::rename(icd_to_label = .data$label),
+        dplyr::select("icd_normcode", "year", "label") %>%
+        dplyr::rename(icd_to_label = "label"),
       by = c("icd_to" = "icd_normcode",
              "year_to" = "year")
     )
